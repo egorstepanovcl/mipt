@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field, field_validator, EmailStr
 from typing import List
-from datetime import datetime, date
+from datetime import datetime, date, timezone
 import json
 import re
 from pathlib import Path
@@ -70,7 +70,12 @@ class AppealRequest(BaseModel):
     @field_validator('issue_datetime')
     @classmethod
     def validate_issue_datetime(cls, v: datetime) -> datetime:
-        if v > datetime.now():
+        now = datetime.now(timezone.utc)
+        
+        if v.tzinfo is None:
+            now = datetime.now()
+        
+        if v > now:
             raise ValueError('Дата обнаружения проблемы не может быть в будущем')
         
         return v
