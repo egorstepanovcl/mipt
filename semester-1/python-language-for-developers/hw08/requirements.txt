@@ -1,0 +1,5 @@
+fastapi==0.121.1
+pydantic==2.12.4
+pydantic[email]==2.12.4
+uvicorn[standard]==0.38.0
+
