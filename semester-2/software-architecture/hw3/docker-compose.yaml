@@ -1,0 +1,22 @@
+services:
+  app1:
+    build: ./app1
+    expose:
+      - "5000"          # Доступен только внутри Docker-сети
+    networks:
+      - mynetwork
+
+  app2:
+    build: ./app2
+    ports:
+      - "8000:8000"     # Доступен снаружи на порту 8000
+    environment:
+      APP1_HOST: app1
+      APP1_PORT: 5000
+    depends_on:
+      - app1            # app1 запускается первым
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
